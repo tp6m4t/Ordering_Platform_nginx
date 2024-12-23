@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>螈蛭科技菜單系統</title>
+    <style type="text/css">
+        #menu {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        #menu .a {
+            display: none;
+        }
+
+            #menu label {
+                margin: 0 5px 5px 0;
+                padding: 10px 16px;
+                cursor: pointer;
+                border-radius: 5px;
+                background: burlywood;
+                color: #fff;
+                opacity: 0.5;
+            }
+
+        .tab_content {
+            order: 1;
+            display: none;
+            width: 100%;
+            border-bottom: 3px solid #ddd;
+            line-height: 1.6;
+            font-size: .9em;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        #menu input:checked + label, .menu label:hover {
+            opacity: 1;
+            font-weight: bold;
+        }
+
+        #menu input:checked + label + .tab_content {
+            display: initial;
+        }
+    </style>
+    <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script>
+        function start() {
+            $.ajax({
+                url: "login.php",
+                datatype: "html",
+                success: function (output) {
+                    $("#menu").html(output);
+                },
+                error: function () {
+                    alert("Request failed.");
+                }
+            })
+        }
+        function GO() {
+            $.ajax({
+                url: "step1.php",
+                datatype: "text",
+                success: function (output) {
+                    alert(output);
+                    TO();
+                },
+                error: function () {
+                    alert("Request failed.");
+                }
+            })
+        }
+        function TO() {
+            var list = document.getElementsByClassName("number");
+            var id;
+            var number;
+            for (var i = 0; i != list.length; i++) {
+                id = list[i].id;
+                number = list[i].value;
+                $.ajax({
+                    url: "step2.php",
+                    type: "post",
+                    data: {
+                        id: id,
+                        number: number
+                    },
+                    datatype: "html",
+                    success: function (output) {
+                        $("#goreturn").html(output);
+                        
+                    },
+                    error: function () {
+                        alert("Request failed.");
+                    }
+                })
+            }
+            alert("訂單已送出");
+            document.getElementById("get_out").innerHTML="<a href='../order_Tracking'>查詢訂單狀況</a>"
+        }
+        function relogin() {
+            var list = document.getElementsByClassName("number");
+            var NT = document.getElementsByClassName("NT");
+            var name = document.getElementsByClassName("name");
+            var monny = 0;
+            var sum = "<table>";
+            for (var i = 0; i != list.length; i++) {
+                if (list[i].value != 0) {
+                    var txt = String(name[i].innerHTML);
+                    var doll = parseInt(NT[i].innerHTML);
+                    sum += ("<tr><td>" + txt + "</td><td>*" + list[i].value + "</td><td>$" + (doll * list[i].value) + "</td></tr>");
+                    monny += (doll * list[i].value);
+                }
+            }
+            sum += "<tr><td colspan='2'>總金額</td><td>$"+ monny +"</td></tr></table>"
+            var a = document.getElementById("sum");
+            a.innerHTML=sum;
+        }
+        window.addEventListener("load", start, false);
+        window.addEventListener("change", relogin,false);
+    </script>
+</head>
+<body>
+    <div>
+        <div id="menu"></div>
+        <div id="goreturn"></div>
+    </div>
+    <div id="sum"></div>
+    <div id="get_out"></div>
+</body>
+</html>

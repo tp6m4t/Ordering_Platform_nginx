@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>螈蛭科技菜單系統</title>
+    <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script>
+        var order;
+        function Tracking() {
+            $.ajax({
+                url: "Tracking.php",
+                type: "get",
+                data: { order: order },
+                datatype: "html",
+                success: function (output) {
+                    $("#out_order").html(output);
+                },
+                error: function () {
+                    alert("Request failed.");
+                }
+            })
+        }
+        function Tracking_frst() {
+            order = document.getElementById("order").value;
+            $.ajax({
+                url: "Tracking.php",
+                type: "get",
+                data: { order: order },
+                datatype: "html",
+                success: function (output) {
+                    $("#out_order").html(output);
+                    setInterval('Tracking()', 5000);
+                },
+                error: function () {
+                    alert("Request failed.");
+                }
+            })
+        }
+
+    </script>
+</head>
+<body>
+    <div>
+        <input type="number" id="order" />
+        <input type="button" onclick="Tracking_frst()" value="查詢" />
+    </div>
+    <div id="out_order"></div>
+</body>
+</html>

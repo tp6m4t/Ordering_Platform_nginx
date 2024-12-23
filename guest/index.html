@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>螈蛭科技菜單系統</title>
+    <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script>
+        function start() {
+            $.ajax({
+                url: "login.php",
+                datatype: "html",
+                success: function (output) {
+                    $("#step1").html(output);
+                },
+                error: function () {
+                    alert("Request failed.");
+                }
+            })
+        }
+        function step1() {
+            document.getElementById('button1').remove();
+            var restaurant = $("#step1_select").val();
+            $.ajax({
+                url: "step1.php",
+                type: "get",
+                data: { restaurant: restaurant },
+                datatype: "html",
+                success: function (output) {
+                    $("#step2").html(output);
+                },
+                error: function () {
+                    alert("Request failed.");
+                }
+            })
+        }
+        function step2() {
+            var restaurant = $("#step1_select").val();
+            var table = $("#table").val();
+            $.ajax({
+                url: "step2.php",
+                type: "get",
+                data: {
+                    restaurant: restaurant,
+                    table:table
+                },
+                success: function () {
+                    document.location.href = "menu";
+                },
+                error: function () {
+                    alert("Request failed.");
+                }
+            })
+        }
+        function restep1() {
+            document.getElementById('step1_1').remove();
+            document.getElementById('step2_1').remove();
+            start();
+        }
+        window.addEventListener("load", start, false);
+    </script>
+</head>
+<body>
+    <div id="step1"></div>
+    <div id="step2"></div>
+</body>
+</html>

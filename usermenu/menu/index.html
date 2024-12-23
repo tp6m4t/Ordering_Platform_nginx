@@ -1,0 +1,154 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>螈蛭科技菜單系統menu</title>
+    <style type="text/css">
+        #set {
+            display: flex;
+            justify-content: space-evenly;
+            align-items: stretch;
+            flex-direction: row;
+        }
+
+        .b {
+            background-color: #FFD382;
+            border-radius: 15px;
+            text-align: center;
+        }
+        .a {
+            background-color: orange;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        #menu {
+            display: flex;
+            justify-content: flex-start;
+            align-items: stretch;
+            flex-wrap: wrap;
+            flex-direction: row;
+        }
+
+            #menu table {
+                background-color: #FFD382;
+                margin-bottom: 5px;
+                border-radius: 15px;
+                text-align: center;
+            }
+    </style>
+    <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script>
+        function start() {
+            $.ajax({
+                url: "lodingmenu.php",
+                type: "post",
+                data: { need: "menu" },
+                datatype: "html",
+                success: function (output) {
+                    $("#menu").html(output);
+                },
+                error: function () {
+                    alert("Request failed.");
+                }
+            });
+            $.ajax({
+                url: "lodingmenu.php",
+                type: "post",
+                data: { need: "set" },
+                datatype: "html",
+                success: function (output) {
+                    $("#nowset").html(output);
+                },
+                error: function () {
+                    alert("Request failed.");
+                }
+            });
+        }
+        function addmenu() {
+            var addmenuclass = $("#addmenuclass").val();
+            var addcommodity = $("#addcommodity").val();
+            var addNT = $("#addNT").val();
+            $.ajax({
+                url: "add.php",
+                type: 'post',
+                data: {
+                    addclass: addmenuclass,
+                    addcommodity: addcommodity,
+                    addNT: addNT
+                },
+                success: function () {
+                    window.location.reload();
+                },
+                error: function () {
+                    alert("Request failed.");
+                }
+            });
+        }
+        function reset() {
+            var tables = $("#tables").val();
+            var Take_out = $("[name='Take_out']:checked").val();
+            $.ajax({
+                url: "set.php",
+                type: 'post',
+                data: {
+                    new_tables: tables,
+                    new_Take_out: Take_out
+                },
+                success: function () {
+                    window.location.reload();
+                },
+                error: function () {
+                    alert("Request failed.");
+                }
+            });
+        }
+        function deletemenu(where) {
+            $.ajax({
+                url: "deletemenu.php",
+                type: 'post',
+                data: {
+                    where: where
+                },
+                datatype: "html",
+                success: function (text) {
+                    window.location.reload();
+                },
+                error: function () {
+                    alert("Request failed.");
+                }
+            });
+        }
+
+        window.addEventListener("load", start, false);
+    </script>
+</head>
+<body>
+    <div id="menu"></div>
+    <div id="set">
+        <div class="b">
+            <p style="font-size:30px">新增菜品項目</p>
+            <p>分類 : <input type="text" id="addmenuclass" /></p>
+            <p>菜品 : <input type="text" id="addcommodity" /></p>
+            <p>價格 : <input type="text" id="addNT" /></p>
+            <br>
+            <input type="button" value="新增菜單品項" onclick="addmenu();" />
+        </div>
+        <div  class="a">
+            <div id="nowset" class="b"></div>
+            <div class="b">
+                <p>修改設定</p>
+                <p>桌數 : <input type="number" max="100" min="0" id="tables" /></p>
+                <p>
+                    是否開放外帶 :
+                    <input type="radio" name="Take_out" value=1>是
+                    <input type="radio" name="Take_out" value=0>否
+                </p>
+                <br>
+                <input type="button" value="儲存資料" onclick="reset();" />
+            </div>
+        </div>
+    </div>
+</body>
+</html>

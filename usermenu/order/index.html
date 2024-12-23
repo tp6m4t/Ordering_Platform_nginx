@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>螈蛭科技菜單系統</title>
+    <style type="text/css">
+        #out {
+            display: flex;
+            justify-content: center;
+            width: 750px;
+            flex-wrap: wrap;
+        }
+
+        .order {
+            flex-basis: 250px;
+            flex-shrink:0;
+        }
+        .order {
+            background-color: #FFD382;
+            margin-bottom: 5px;
+            margin-right: 5px;
+            border-radius: 15px;
+            text-align: center;
+        }
+    </style>
+    <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script>
+        function finish(id_in_order) {
+            $.ajax({
+                url: "finish_one.php",
+                type: "post",
+                data: {
+                    id_in_order:id_in_order
+                }
+            })
+        }
+        function start() {
+            $.ajax({
+                url: "login.php",
+                datatype: "html",
+                success: function (output) {
+                    $("#out").html(output);
+                },
+                error: function () {
+                    alert("Request failed.");
+                }
+            })
+        }
+        function finish_order(id_order_only) {
+            $.ajax({
+                url: "finish_all.php",
+                type: "post",
+                data: {
+                    id_order_only: id_order_only
+                },
+                datatype: "text",
+                success: function (output) {
+                    alert(output);
+                },
+                error: function () {
+                    alert("Request failed.");
+                }
+            })
+            start();
+        }
+        window.addEventListener("load", start, false);
+        setInterval('start()', 1000);
+    </script>
+</head>
+<body>
+    <div id="out"></div>
+</body>
+</html>

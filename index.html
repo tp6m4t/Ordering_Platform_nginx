@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>螈蛭科技菜單系統</title>
+    <style type="text/css">
+        #title{
+            display: flex;
+        }
+            #title p {
+                color: white;
+                margin-left: 20px;
+                background-color: darkorange;
+                width: 225px;
+                vertical-align: middle;
+                height:30px;
+                border-radius:10px;
+                font-size:20px;
+                text-align:center;
+            }
+        #head {
+            display: flex;
+        }
+
+        #head button {
+            align-items: stretch;
+            flex-wrap: nowrap;
+            flex-direction: row;
+            justify-content: space-around;
+            margin: 5px;
+            border-radius: 50px;
+            flex-grow: 3;
+            min-height: 50px;
+            background-color: antiquewhite;
+        }
+        #head button:hover {
+            border-color: #FFD382;
+        }
+        #head .user {
+            flex-grow: 1;
+        }
+        #state {
+            display: flex;
+            justify-content: space-evenly;
+        }
+        form *{
+            display:flex;
+        }
+        input {
+            margin: 5px;
+            border-radius: 50px;
+            background-color: antiquewhite;
+            min-width: 60px;
+            text-align: center;
+        }
+    </style>
+    <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script>
+        function guest() {
+            document.location.href = "guest";
+        }
+        function login() {
+            var now = document.getElementById('state');
+            state.innerHTML = '<p style="font-size: 60px;" id="now_text">登<br>入</p><form><p>商家帳號(限數字): </p><input type="text" name="account" /><br /><p>密碼:</p><input type="password" name="password" /><br /><p><input type="button" onclick="login_php();" value="登入"></p> ';
+        }
+        function register() {
+            var now = document.getElementById('state');
+            state.innerHTML = '<p style="font-size: 60px;" id="now_text">註<br>冊</p><form action="register.php" method ="post"> <p>商家店名: </p><input type="text" name="restaurant"><br /><p>商家帳號(限數字且8字以內): </p><input type="text" name="account" /><br /><p>密碼:</p><input type="password" name="password" /><br /><p><input type="submit" value="註冊" /></p> ';
+        }
+        function Tracking() {
+            document.location.href = "guest/Order_Tracking";
+        }
+        function login_php() {
+            var account = $("input[name=account]").val();
+            var password = $("input[name=password]").val();
+            $.ajax({
+                url: "login.php",
+                type:'post',
+                data: {
+                    account: account,
+                    password: password
+                },
+                datatype: "text",
+                success: function (text) {
+                    if (text == "1") {
+                        document.location.href = "usermenu";
+                    }
+                    else {
+                        window.alert("帳號或密碼錯誤請重新再試");
+                        alert(text);
+                    }
+                },
+                error: function () {
+                    alert("Request failed.");
+                }
+            })
+        }
+    </script>
+
+</head>
+<body>
+    <div id="title">
+        <p>歡迎使用螈蛭科技菜單系統</p>
+    </div>
+    <div id="head">
+        <button onclick="guest();">點菜系統</button>
+        <button onclick="Tracking();">訂單進度查詢</button>
+        <button class="user" onclick="login();">我想登入</button>
+        <button class="user" onclick="register();">我想註冊</button>
+    </div>
+    <div id="state"></div>
+
+</body>
+</html>
